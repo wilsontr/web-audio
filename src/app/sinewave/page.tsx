@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "../page.module.css";
-import { useAudioContext } from "../shared";
+import { useAudioContext } from "@/shared";
 
 export default function Test() {
   const audioContext = useAudioContext();
