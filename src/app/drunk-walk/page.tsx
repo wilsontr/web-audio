@@ -70,19 +70,27 @@ export default function DrunkWalk() {
 
   return (
     <main className={styles.main}>
-      <a className="button is-rounded" href="/">
-        back
-      </a>
-      <div className={styles.description}>
-        <h1 className={styles.header}>drunk walk test</h1>
+      <div className={styles.card}>
+        <div className={styles.description}>
+          <h1 className={styles.header}>drunk walk</h1>
+          <p>
+            a sine wave moving through a Minyo scale using a random walk
+            algorithm
+          </p>
+        </div>
+        <div className="level">
+          <a className="button is-rounded" href="/">
+            back
+          </a>
+          <button
+            onClick={handleStartClick}
+            type="button"
+            className="button is-primary is-rounded"
+          >
+            {audioStarted ? "stop" : "start"}
+          </button>
+        </div>
       </div>
-      <button
-        onClick={handleStartClick}
-        type="button"
-        className="button is-primary is-rounded"
-      >
-        {audioStarted ? "stop" : "start"}
-      </button>
     </main>
   );
 }

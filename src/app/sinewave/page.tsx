@@ -49,21 +49,24 @@ export default function Test() {
 
   return (
     <main className={styles.main}>
-      <a className="button is-rounded" href="/">
-        back
-      </a>
-      <div className={styles.description}>
-        <h1 className={styles.header}>
-          220hz sine wave panning between channels at 0.25 hz
-        </h1>
+      <div className={styles.card}>
+        <div className={styles.description}>
+          <h1 className={styles.header}>sine test</h1>
+          <p>220hz sine wave panning between channels at 0.25 hz</p>
+        </div>
+        <div className="level">
+          <a className="button is-rounded" href="/">
+            back
+          </a>
+          <button
+            onClick={handleStartClick}
+            type="button"
+            className="button is-primary is-rounded"
+          >
+            {audioStarted ? "stop" : "start"}
+          </button>
+        </div>
       </div>
-      <button
-        onClick={handleStartClick}
-        type="button"
-        className="button is-primary is-rounded"
-      >
-        {audioStarted ? "stop" : "start"}
-      </button>
     </main>
   );
 }
