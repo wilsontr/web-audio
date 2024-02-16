@@ -2,15 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "../page.module.css";
-import { useAudioContext } from "@/shared";
+import { useAudioContext } from "@/shared/hooks";
 
 export default function Test() {
-  const audioContext = useAudioContext();
+  const { audioContext, handleAudioToggle, audioStarted } = useAudioContext();
   const oscillator = useRef<OscillatorNode | undefined>();
   const panner = useRef<StereoPannerNode | undefined>();
   const pannerGain = useRef<GainNode | undefined>();
   const lfo = useRef<OscillatorNode | undefined>();
-  const [audioStarted, setAudioStarted] = useState(false);
 
   useEffect(() => {
     if (audioContext) {
@@ -37,16 +36,6 @@ export default function Test() {
     }
   }, [audioContext]);
 
-  const handleStartClick = () => {
-    if (audioStarted) {
-      setAudioStarted(false);
-      audioContext?.suspend();
-    } else {
-      setAudioStarted(true);
-      audioContext?.resume();
-    }
-  };
-
   return (
     <main className={styles.main}>
       <div className={styles.card}>
@@ -59,7 +48,7 @@ export default function Test() {
             back
           </a>
           <button
-            onClick={handleStartClick}
+            onClick={handleAudioToggle}
             type="button"
             className="button is-primary is-rounded"
           >

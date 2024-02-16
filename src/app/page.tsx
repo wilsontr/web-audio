@@ -7,6 +7,7 @@ export default function Home() {
       <div className={styles.description}>
         <a href="/sinewave">sine wave</a>
         <a href="/drunk-walk">drunk walk</a>
+        <a href="/variable-time">variable time</a>
       </div>
     </main>
   );

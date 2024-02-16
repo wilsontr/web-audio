@@ -1,18 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "../page.module.css";
-import { useAudioContext, useDrunkWalk, useInterval } from "@/shared/hooks";
-import { minyoScale } from "@/shared/scales";
+import { useAudioContext, useDrunkWalk, useTimeout } from "@/shared/hooks";
+import { iwatoScale } from "@/shared/scales";
 
-export default function DrunkWalk() {
+export default function VariableTime() {
   const oscillator = useRef<OscillatorNode | undefined>();
   const { audioContext, handleAudioToggle, audioStarted } = useAudioContext();
-  const { value, update } = useDrunkWalk({
+  const { value: noteValue, update: updateNote } = useDrunkWalk({
     initialValue: 5,
     min: 0,
-    max: minyoScale.length - 1,
-    stepSize: 1,
+    max: iwatoScale.length - 1,
+  });
+
+  const { value: timeValue, update: updateTimeValue } = useDrunkWalk({
+    initialValue: 250,
+    min: 50,
+    max: 500,
+    stepSize: 50,
   });
 
   useEffect(() => {
@@ -26,32 +32,45 @@ export default function DrunkWalk() {
     }
   }, [audioContext]);
 
-  useInterval({
-    callback: () => {
-      if (audioStarted) {
-        update();
-      }
-    },
-    delay: 500,
+  const handleTimeout = useCallback(() => {
+    updateNote();
+    updateTimeValue();
+  }, [updateNote, updateTimeValue]);
+
+  const { setTimeoutLength, startTimeout } = useTimeout({
+    callback: handleTimeout,
+    timeout: 250,
   });
+
+  useEffect(() => {
+    if (audioStarted) {
+      startTimeout(timeValue);
+    }
+  }, [timeValue, audioStarted]);
 
   useEffect(() => {
     if (audioContext) {
       oscillator.current?.frequency.setValueAtTime(
-        minyoScale[value],
+        iwatoScale[noteValue],
         audioContext?.currentTime
       );
     }
-  }, [value, audioContext]);
+  }, [noteValue, audioContext]);
+
+  useEffect(() => {
+    if (audioStarted) {
+      startTimeout();
+    }
+  }, [audioStarted]);
 
   return (
     <main className={styles.main}>
       <div className={styles.card}>
         <div className={styles.description}>
-          <h1 className={styles.header}>drunk walk</h1>
+          <h1 className={styles.header}>variable time</h1>
           <p>
-            a sine wave moving through a Minyo scale using a random walk
-            algorithm
+            a sine wave moving through an Iwato scale using a random walk
+            algorithm to control note value and time between note changes
           </p>
         </div>
         <div className="level">
